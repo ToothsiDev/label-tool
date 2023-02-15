@@ -90,12 +90,12 @@ export default class LabelingLoader extends Component {
       },
       body: JSON.stringify({ labelData }),
     });
-    if (Number(projectId) == 10) {
-      await this.markComplete();
-      const { history } = this.props;
-      const { project } = this.state;
-      history.push(`/label/${project.id}/`);
-    }
+    // if (Number(projectId) == 10) {
+    //   await this.markComplete();
+    //   const { history } = this.props;
+    //   const { project } = this.state;
+    //   history.push(`/label/${project.id}/`);
+    // }
   }
 
   async markComplete() {
@@ -148,7 +148,7 @@ export default class LabelingLoader extends Component {
           fetch={this.fetch.bind(this)}
           image={image}
           demo={project.id === 'demo'}
-          showCustomOptions={[8, 9].includes(project.id)}
+          showCustomOptions={[8, 9, 10].includes(project.id)}
           {...props}
         />
       </DocumentMeta>

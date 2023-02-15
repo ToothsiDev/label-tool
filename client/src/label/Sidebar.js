@@ -102,7 +102,15 @@ export default class Sidebar extends PureComponent {
           <Hotkeys keyName="esc" onKeyDown={() => onSelect(null)} />
         </List>
         {showCustomOptions ? (
-          <div style={{ flex: '0 0 auto', display: 'flex', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              flex: '0 0 auto',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '10px',
+              marginBottom: '10px',
+            }}
+          >
             <Button onClick={() => onCustomButtonsClick(6, 'PROPER')}>6</Button>
             <Button onClick={() => onCustomButtonsClick(7, 'PROPER')}>7</Button>
             <Button onClick={() => onCustomButtonsClick(8, 'PROPER')}>8</Button>
@@ -121,11 +129,14 @@ export default class Sidebar extends PureComponent {
           <Button secondary onClick={onSkip}>
             Skip
           </Button>
-          {window.location.href.split('/')[4] != 10 ? (
+          <Button primary onClick={onSubmit} id="submit-move-to-next">
+            Submit
+          </Button>
+          {/* {window.location.href.split('/')[4] != 10 ? (
             <Button primary onClick={onSubmit} id="submit-move-to-next">
               Submit
             </Button>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     );
@@ -253,7 +264,7 @@ function ListItem({
       const { options } = label;
       const items = options.map(option => (
         <List.Item key={option}>
-          {window.location.href.split('/')[4] == 10 ? (
+          {/* {window.location.href.split('/')[4] == 10 ? (
             <Button
               onClick={() => {
                 onFormChange(label.id, [option]);
@@ -267,7 +278,12 @@ function ListItem({
               checked={labelData.indexOf(option) !== -1}
               onChange={(e, { checked }) => onFormChange(label.id, [option])}
             />
-          )}
+          )} */}
+          <Radio
+            label={option}
+            checked={labelData.indexOf(option) !== -1}
+            onChange={(e, { checked }) => onFormChange(label.id, [option])}
+          />
         </List.Item>
       ));
       return <List style={sublistStyle}>{items}</List>;
