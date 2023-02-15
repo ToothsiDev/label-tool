@@ -121,9 +121,11 @@ export default class Sidebar extends PureComponent {
           <Button secondary onClick={onSkip}>
             Skip
           </Button>
-          <Button primary onClick={onSubmit} id="submit-move-to-next">
-            Submit
-          </Button>
+          {window.location.href.split('/')[4] != 10 ? (
+            <Button primary onClick={onSubmit} id="submit-move-to-next">
+              Submit
+            </Button>
+          ) : null}
         </div>
       </div>
     );
@@ -251,11 +253,21 @@ function ListItem({
       const { options } = label;
       const items = options.map(option => (
         <List.Item key={option}>
-          <Radio
-            label={option}
-            checked={labelData.indexOf(option) !== -1}
-            onChange={(e, { checked }) => onFormChange(label.id, [option])}
-          />
+          {window.location.href.split('/')[4] == 10 ? (
+            <Button
+              onClick={() => {
+                onFormChange(label.id, [option]);
+              }}
+            >
+              {option}
+            </Button>
+          ) : (
+            <Radio
+              label={option}
+              checked={labelData.indexOf(option) !== -1}
+              onChange={(e, { checked }) => onFormChange(label.id, [option])}
+            />
+          )}
         </List.Item>
       ));
       return <List style={sublistStyle}>{items}</List>;

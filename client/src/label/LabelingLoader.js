@@ -81,7 +81,7 @@ export default class LabelingLoader extends Component {
   }
 
   async pushUpdate(labelData) {
-    const { imageId } = this.props.match.params;
+    const { imageId, projectId } = this.props.match.params;
     await this.fetch('/api/images/' + imageId, {
       method: 'PATCH',
       headers: {
@@ -90,6 +90,12 @@ export default class LabelingLoader extends Component {
       },
       body: JSON.stringify({ labelData }),
     });
+    if (Number(projectId) == 10) {
+      await this.markComplete();
+      const { history } = this.props;
+      const { project } = this.state;
+      history.push(`/label/${project.id}/`);
+    }
   }
 
   async markComplete() {
