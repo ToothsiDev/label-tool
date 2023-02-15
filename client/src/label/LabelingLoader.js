@@ -90,12 +90,12 @@ export default class LabelingLoader extends Component {
       },
       body: JSON.stringify({ labelData }),
     });
-    if (Number(projectId) == 10) {
-      await this.markComplete();
-      const { history } = this.props;
-      const { project } = this.state;
-      history.push(`/label/${project.id}/`);
-    }
+    // if (Number(projectId) == 10) {
+    //   await this.markComplete();
+    //   const { history } = this.props;
+    //   const { project } = this.state;
+    //   history.push(`/label/${project.id}/`);
+    // }
   }
 
   async markComplete() {
