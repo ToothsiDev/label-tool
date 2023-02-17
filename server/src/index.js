@@ -337,6 +337,20 @@ app.patch('/api/images/:imageId', (req, res) => {
   });
 });
 
+app.patch('/api/images/batch-label', (req, res) => {
+  const { imageArr } = req.body;
+  imageArr.forEach(cur => {
+    const { labelData, imageId } = cur;
+    if (labelData) {
+      images.updateLabel(imageId, labelData);
+    }
+    // not setting labeled=true because these images need to be manually verified
+  });
+  res.json({
+    success: true,
+  });
+});
+
 const exportSingleImageData = async imageId => {
   const imageData = images.get(imageId);
   console.log(imageData);
