@@ -339,6 +339,7 @@ app.patch('/api/images/:imageId', (req, res) => {
 
 app.patch('/api/images/batch-label', (req, res) => {
   const { imageArr } = req.body;
+  console.log(imageArr);
   imageArr.forEach(cur => {
     const { labelData, imageId } = cur;
     if (labelData) {
