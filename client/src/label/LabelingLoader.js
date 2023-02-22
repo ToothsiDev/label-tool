@@ -149,6 +149,7 @@ export default class LabelingLoader extends Component {
           image={image}
           demo={project.id === 'demo'}
           showCustomOptions={[8, 9, 10].includes(project.id)}
+          showGradeOptions={[1].includes(project.id)}
           {...props}
         />
       </DocumentMeta>

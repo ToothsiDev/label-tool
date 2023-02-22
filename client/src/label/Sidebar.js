@@ -9,12 +9,21 @@ import {
   Checkbox,
   Radio,
   Select,
+  Modal,
+  Container,
 } from 'semantic-ui-react';
 import { shortcuts, colors } from './utils';
 import Hotkeys from 'react-hot-keys';
+import { gradeArr } from './utils';
 
 const headerIconStyle = { fontSize: '0.8em', float: 'right' };
 export default class Sidebar extends PureComponent {
+  constructor() {
+    super();
+    this.state = {
+      openModal: false,
+    };
+  }
   render() {
     const {
       title,
@@ -37,8 +46,8 @@ export default class Sidebar extends PureComponent {
       imageWidth,
       imageHeight,
       makePrediction,
+      showGradeOptions,
     } = this.props;
-
     const hotkeysButton = openHotkeys ? (
       <Icon
         link
@@ -64,7 +73,22 @@ export default class Sidebar extends PureComponent {
       });
       onSubmit();
     };
-
+    const onGradeButtonsClick = async data => {
+      const labelData = {
+        labels: data,
+        width: imageWidth,
+        height: imageHeight,
+      };
+      await fetch('/api/images/' + image.id, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ labelData }),
+      });
+      onSubmit();
+    };
     const getSelectHandler = ({ type, id }) =>
       type === 'bbox' || type === 'polygon' ? () => onSelect(id) : null;
     return (
@@ -101,6 +125,50 @@ export default class Sidebar extends PureComponent {
           )}
           <Hotkeys keyName="esc" onKeyDown={() => onSelect(null)} />
         </List>
+        {showGradeOptions ? (
+          <div style={{ paddingBottom: '20px' }}>
+            <div
+              onClick={() => this.setState({ openModal: true })}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Header as="h3">Grading system</Header>
+              <i aria-hidden="true" class="info circle icon" />
+            </div>
+            <div
+              style={{
+                flex: '0 0 auto',
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '10px',
+                marginBottom: '10px',
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1].map(data => (
+                <div>
+                  <Button
+                    size="tiny"
+                    onClick={() => {
+                      if (data == -1) {
+                        labelData[labels[0].id] = [''];
+                        labelData[labels[1].id] = ['REJECT'];
+                      } else {
+                        labelData[labels[0].id] = [`${data}`];
+                        labelData[labels[1].id] = ['PROPER'];
+                      }
+                      onGradeButtonsClick(labelData);
+                    }}
+                  >
+                    {`${data != -1 ? `Grade ${data}` : `REJECT`}`}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
         {showCustomOptions ? (
           <div
             style={{
@@ -138,6 +206,28 @@ export default class Sidebar extends PureComponent {
             </Button>
           ) : null} */}
         </div>
+        <Modal
+          open={this.state.openModal}
+          onClose={() => this.setState({ openModal: false })}
+        >
+          <Modal.Content>
+            <Container>
+              {gradeArr.map(d => (
+                <>
+                  <p>{d}</p>
+                </>
+              ))}
+            </Container>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              color="black"
+              onClick={() => this.setState({ openModal: false })}
+            >
+              Close
+            </Button>
+          </Modal.Actions>
+        </Modal>
       </div>
     );
   }
