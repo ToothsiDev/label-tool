@@ -143,9 +143,9 @@ export default class Sidebar extends PureComponent {
                 flex: '0 0 auto',
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '30px',
+                gap: '15px',
                 flexDirection: 'column',
-                margin: '0 30px 10px 0',
+                margin: '0 15px 10px 0',
               }}
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1].map(data => (
