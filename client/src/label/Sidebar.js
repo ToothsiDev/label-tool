@@ -106,7 +106,7 @@ export default class Sidebar extends PureComponent {
           {title}
           {hotkeysButton}
         </Header>
-        <List divided selection style={{ flex: 1, overflowY: 'auto' }}>
+        <List divided selection style={{ flex: 1, overflowY: 'auto', display: showGradeOptions ? 'none': 'initial' }}>
           {labels.map((label, i) =>
             ListItem({
               shortcut: shortcuts[i],
