@@ -21,7 +21,7 @@ export default class Sidebar extends PureComponent {
   constructor() {
     super();
     this.state = {
-      openModal: false,
+      openGradeInfoModal: false,
     };
   }
   render() {
@@ -128,7 +128,7 @@ export default class Sidebar extends PureComponent {
         {showGradeOptions ? (
           <div style={{ paddingBottom: '20px' }}>
             <div
-              onClick={() => this.setState({ openModal: true })}
+              onClick={() => this.setState({ openGradeInfoModal: true })}
               style={{
                 cursor: 'pointer',
                 display: 'flex',
@@ -153,7 +153,7 @@ export default class Sidebar extends PureComponent {
                     size="tiny"
                     onClick={() => {
                       if (data == -1) {
-                        labelData[labels[0].id] = [''];
+                        labelData[labels[0].id] = [`${data}`];
                         labelData[labels[1].id] = ['REJECT'];
                       } else {
                         labelData[labels[0].id] = [`${data}`];
@@ -207,8 +207,8 @@ export default class Sidebar extends PureComponent {
           ) : null} */}
         </div>
         <Modal
-          open={this.state.openModal}
-          onClose={() => this.setState({ openModal: false })}
+          open={this.state.openGradeInfoModal}
+          onClose={() => this.setState({ openGradeInfoModal: false })}
         >
           <Modal.Content>
             <Container>
@@ -222,7 +222,7 @@ export default class Sidebar extends PureComponent {
           <Modal.Actions>
             <Button
               color="black"
-              onClick={() => this.setState({ openModal: false })}
+              onClick={() => this.setState({ openGradeInfoModal: false })}
             >
               Close
             </Button>
