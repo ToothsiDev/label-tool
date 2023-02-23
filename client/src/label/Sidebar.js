@@ -15,6 +15,7 @@ import {
 import { shortcuts, colors } from './utils';
 import Hotkeys from 'react-hot-keys';
 import { gradeArr } from './utils';
+import Test from './Test';
 
 const headerIconStyle = { fontSize: '0.8em', float: 'right' };
 export default class Sidebar extends PureComponent {
@@ -125,6 +126,7 @@ export default class Sidebar extends PureComponent {
           )}
           <Hotkeys keyName="esc" onKeyDown={() => onSelect(null)} />
         </List>
+        <Test />
         {showGradeOptions ? (
           <div style={{ paddingBottom: '20px' }}>
             <div
