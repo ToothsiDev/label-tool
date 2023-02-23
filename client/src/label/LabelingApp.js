@@ -233,6 +233,7 @@ class LabelingApp extends Component {
       image,
       showCustomOptions,
       makePrediction,
+      showGradeOptions,
     } = this.props;
 
     const {
@@ -400,6 +401,7 @@ class LabelingApp extends Component {
               {...sidebarProps}
               {...forwardedProps}
               style={{ flex: 1, maxWidth: 300 }}
+              showGradeOptions={showGradeOptions}
             />
             {hotkeysPanelDOM}
             <div style={{ flex: 4, display: 'flex', flexDirection: 'column' }}>

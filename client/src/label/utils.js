@@ -66,3 +66,16 @@ export const colors = [
   'pink',
   'black',
 ];
+
+export const gradeArr = [
+  'Grade 1: No malocclusions observed',
+  'Grade 2: Extremely minor malocclusions, including contact point displacements less than 1 mm (No overbite, overjet, crossbite or craniofacial anomalies observed)',
+  'Grade 3: Minor malocclusions which can be corrected by moving one or two teeth slightly (No overbite,overjet, crossbite or craniofacial anomalies observed)',
+  'Grade 4: Mild malocclusions which can be corrected by moving several teeth (less than 6) slightly (No overbite, overjet, crossbite or craniofacial anomalies observed)',
+  'Grade 5: Mild malocclusions which can be corrected by moving serveral teeth together (No overbite, overjet, crossbite or craniofacial anomalies observed)',
+  'Grade 6: Moderate malocclusions which can be corrected by moving one or two teeth deeply / Moderate contact point displacements (>2mm and < 6mm) / Little or mild overbite, overjet or crossbite',
+  'Grade 7: Moderate malocclusions which can be corrected by moving several teeth (less than 6) deeply / Moderate overbite, overjet or crossbite which can be corrected by othodontics only',
+  'Grade 8: Severe malocclusions which can be corrected by moving several teeth together deeply / Increased and complete overbite with gingival or palatal trauma',
+  'Grade 9: Severe malocclusions which requires moving almost all teeth together. / Severe contact point displacements. / Extreme lateral or anterior open bites. / Possible craniofacial anomalies observed',
+  'Grade 10: Mixed of different malocclusions. (Impeded eruption of teeth due to crowding, displacement, the presence of supernumerary teeth, retained deciduous teeth, and any pathologic cause./ Extensive hypodon-tia with restorative implications requiring preprosthetic orthodontics. /Complete overbite/ Submerged deciduous teeth/ Craniofacial anomalies',
+];
