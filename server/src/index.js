@@ -466,7 +466,7 @@ app.get('/api/projects/:projectId/export', checkLoginMiddleware, (req, res) => {
   archive.pipe(res);
 
   exporter.exportProject(projectId).forEach(({ name, contents }) => {
-    print(name, contents)
+    console.log(name, contents)
     archive.append(contents, { name });
   });
 
