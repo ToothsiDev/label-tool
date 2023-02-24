@@ -460,11 +460,11 @@ app.get('/api/projects/:projectId/export', checkLoginMiddleware, (req, res) => {
     res.status(500).send({ error: err.message });
   });
 
+  const { projectId } = req.params;
   res.attachment(`project-${projectId}-export.zip`);
 
   archive.pipe(res);
 
-  const { projectId } = req.params;
   exporter.exportProject(projectId).forEach(({ name, contents }) => {
     archive.append(contents, { name });
   });
