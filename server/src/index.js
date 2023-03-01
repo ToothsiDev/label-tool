@@ -4,6 +4,7 @@ const multer = require('multer');
 const archiver = require('archiver');
 const request = require('request');
 const cors = require('cors');
+const { OAuth2Client } = require('google-auth-library');
 
 const path = require('path');
 const fs = require('fs').promises;
@@ -13,7 +14,8 @@ const images = require('./queries/images');
 const mlmodels = require('./queries/mlmodels');
 const exporter = require('./exporter');
 const importer = require('./importer');
-const { setup, checkLoginMiddleware, authHandler } = require('./auth');
+const { setup, checkAdminMiddleware } = require('./auth');
+const users = require('./queries/users');
 
 const UPLOADS_PATH =
   process.env.UPLOADS_PATH || path.join(__dirname, '..', 'uploads');
@@ -30,7 +32,7 @@ app.get('/api/mlmodels', (req, res) => {
   res.json(mlmodels.getAll());
 });
 
-app.post('/api/mlmodels', checkLoginMiddleware, (req, res) => {
+app.post('/api/mlmodels', checkAdminMiddleware, (req, res) => {
   // TODO: sanitize input data
   const { model } = req.body;
   const id = mlmodels.create(model);
@@ -54,17 +56,17 @@ app.post('/api/mlmodels/:id', (req, res) => {
     .pipe(res);
 });
 
-app.delete('/api/mlmodels/:id', checkLoginMiddleware, (req, res) => {
+app.delete('/api/mlmodels/:id', checkAdminMiddleware, (req, res) => {
   const { id } = req.params;
   const model = mlmodels.delete(id);
   res.json({ success: true });
 });
 
-app.get('/api/projects', checkLoginMiddleware, (req, res) => {
+app.get('/api/projects', checkAdminMiddleware, (req, res) => {
   res.json(projects.getAll());
 });
 
-app.post('/api/projects', checkLoginMiddleware, (req, res) => {
+app.post('/api/projects', checkAdminMiddleware, (req, res) => {
   res.json(projects.create());
 });
 
@@ -72,7 +74,7 @@ app.get('/api/projects/:id', (req, res) => {
   res.json(projects.get(req.params.id));
 });
 
-app.patch('/api/projects/:id', checkLoginMiddleware, (req, res) => {
+app.patch('/api/projects/:id', checkAdminMiddleware, (req, res) => {
   const { project } = req.body;
   try {
     projects.update(req.params.id, project);
@@ -88,7 +90,7 @@ app.patch('/api/projects/:id', checkLoginMiddleware, (req, res) => {
   res.json({ success: true });
 });
 
-app.delete('/api/projects/:id', checkLoginMiddleware, (req, res) => {
+app.delete('/api/projects/:id', checkAdminMiddleware, (req, res) => {
   projects.delete(req.params.id);
   res.json({ success: true });
 });
@@ -133,7 +135,7 @@ app.post('/api/upload/s3-images', async (req, res) => {
   }
 });
 
-app.post('/api/images', checkLoginMiddleware, async (req, res) => {
+app.post('/api/images', checkAdminMiddleware, async (req, res) => {
   const { projectId, urls, localPath } = req.body;
   if (urls) {
     try {
@@ -183,7 +185,7 @@ app.post('/api/images', checkLoginMiddleware, async (req, res) => {
   }
 });
 
-app.delete('/api/images/:id', checkLoginMiddleware, (req, res) => {
+app.delete('/api/images/:id', checkAdminMiddleware, (req, res) => {
   images.delete(req.params.id);
   res.json({ success: true });
 });
@@ -399,7 +401,7 @@ const uploads = multer({
 
 app.post(
   '/api/uploads/:projectId',
-  checkLoginMiddleware,
+  checkAdminMiddleware,
   uploads.array('images'),
   (req, res) => {
     res.json({ success: true });
@@ -408,7 +410,7 @@ app.post(
 
 app.post(
   '/api/uploads/:projectId/reference',
-  checkLoginMiddleware,
+  checkAdminMiddleware,
   (req, res, next) => {
     req.reference = true;
     next();
@@ -424,7 +426,7 @@ const imports = multer({
 });
 app.post(
   '/api/import/:projectId',
-  checkLoginMiddleware,
+  checkAdminMiddleware,
   (req, res, next) => {
     req.importRes = [];
     next();
@@ -453,7 +455,7 @@ app.get('/uploads/:projectId/:imageName', (req, res) => {
   res.sendFile(path.join(UPLOADS_PATH, projectId, path.join('/', imageName)));
 });
 
-app.get('/api/projects/:projectId/export', checkLoginMiddleware, (req, res) => {
+app.get('/api/projects/:projectId/export', checkAdminMiddleware, (req, res) => {
   const archive = archiver('zip');
 
   archive.on('error', err => {
@@ -474,7 +476,7 @@ app.get('/api/projects/:projectId/export', checkLoginMiddleware, (req, res) => {
 
 app.get(
   '/api/projects/:projectId/export/callbacks',
-  // checkLoginMiddleware,
+  // checkAdminMiddleware,
   (req, res) => {
     const { projectId } = req.params;
     const diffCallbackUrls = {};
@@ -532,7 +534,59 @@ app.get(
   }
 );
 
-app.get('/api/auth', authHandler);
+const oAuth2Client = new OAuth2Client(configuration().googleAuth);
+app.post('/api/auth/google-login', async (req, res) => {
+  const { accessToken } = req.body;
+  if (!accessToken) {
+    res.status(400);
+    res.json({
+      message: 'Please specify accessToken',
+      code: 400,
+    });
+    return;
+  }
+  const tokenInfo = await oAuth2Client.getTokenInfo(accessToken);
+  if (tokenInfo?.email && tokenInfo?.email_verified) {
+    const user = users.get(tokenInfo.email);
+    if (!user) {
+      res.status(401);
+      res.json({
+        message: 'User does not exists',
+        code: 401,
+      });
+      return;
+    }
+    req.session.user = {
+      ...user,
+      accessToken,
+    };
+    res.json({
+      success: true,
+    });
+    return;
+  }
+  res.status(400);
+  res.json({
+    message: 'Please specify valid accessToken',
+    code: 400,
+  });
+  return;
+});
+
+app.get('/api/auth/session-user', (req, res) => {
+  const sessionUser = req.session.user || {};
+  delete sessionUser.accessToken;
+  res.json({
+    success: true,
+    user: sessionUser,
+    isLoggedIn: !!sessionUser.emailId,
+  });
+});
+
+app.get('/api/auth/logout-user', (req, res) => {
+  req.session.user = null;
+  res.json({ success: true });
+});
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../../client/build')));
