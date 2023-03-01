@@ -534,7 +534,10 @@ app.get(
   }
 );
 
-const oAuth2Client = new OAuth2Client(configuration().googleAuth);
+const oAuth2Client = new OAuth2Client({
+  clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
+});
 app.post('/api/auth/google-login', async (req, res) => {
   const { accessToken } = req.body;
   if (!accessToken) {
