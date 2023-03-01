@@ -9,6 +9,9 @@ export default function Login({ history }) {
       const res = await fetch('/api/auth/google-login', {
         method: 'POST',
         body: JSON.stringify({ accessToken: accessToken }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       const data = await res.json();
