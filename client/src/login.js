@@ -6,24 +6,20 @@ export default function Login({ history }) {
   const { login } = useAuth();
   const responseGoogle = async accessToken => {
     try {
-      const res = await fetch('url', {
+      const res = await fetch('/api/auth/google-login', {
         method: 'POST',
         body: JSON.stringify({ accessToken: accessToken }),
       });
 
       const data = await res.json();
-      // if (data?.isSuccess) {
-      //   // localStorage.setItem('accessToken', accessToken);
-      //   login({
-      //     ...data,
-      //     accessToken,
-      //   });
-
-      //   history.push('/');
-      // }
+      if (data && data.success && data.user) {
+        login({
+          ...data,
+        });
+        history.push('/');
+      }
     } catch (error) {
       // history.push('/login');
-
       console.log(error);
     }
   };

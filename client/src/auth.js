@@ -3,52 +3,47 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  const [isUserReady, setIsUserReady] = useState(false);
 
   const login = user => {
     setUser(user);
   };
 
   const logout = () => {
-    setUser({});
+    setUser(null);
   };
 
-  // const fetchUser = async () => {
-  //   const accessToken =
-  //     localStorage.getItem('accessToken') &&
-  //     JSON.parse(localStorage.getItem('accessToken'));
+  const fetchUser = async () => {
+    try {
+      const res = await fetch('/api/auth/session-user', {
+        method: 'GET',
+      });
+      const data = await res.json();
+      if (data && data.success && data.user) {
+        login({
+          ...data.user,
+        });
+      } else {
+        logout();
+      }
+      setIsUserReady(true);
+    } catch (error) {
+      console.log(error);
+      logout();
+      setIsUserReady(true);
+    }
+  };
 
-  //   if (accessToken) {
-  //     try {
-  //       const res = await fetch('url', {
-  //         method: 'POST',
-  //         body: JSON.stringify({ accessToken: accessToken }),
-  //       });
-  //       const data = await res.json();
-  //       if (data?.isSuccess) {
-  //         login({
-  //           ...data,
-  //           accessToken,
-  //         });
-  //       } else {
-  //         localStorage.removeItem('accessToken');
-  //         logout();
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   } else {
-  //     logout();
-  //   }
-  // };
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
   return (
     <AuthContext.Provider
       value={{
         user,
+        isUserReady,
         login,
         logout,
       }}

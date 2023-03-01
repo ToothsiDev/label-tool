@@ -9,7 +9,11 @@ const RequireAuth = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        auth.user ? <Component {...props} /> : <Redirect to="/login" />
+        auth.user || !auth.isUserReady ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   );
