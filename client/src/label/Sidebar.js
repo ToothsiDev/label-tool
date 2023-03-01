@@ -22,7 +22,7 @@ export default class Sidebar extends PureComponent {
   constructor() {
     super();
     this.state = {
-      openModal: false,
+      openGradeInfoModal: false,
     };
   }
   render() {
@@ -107,7 +107,7 @@ export default class Sidebar extends PureComponent {
           {title}
           {hotkeysButton}
         </Header>
-        <List divided selection style={{ flex: 1, overflowY: 'auto' }}>
+        <List divided selection style={{ flex: 1, overflowY: 'auto', display: showGradeOptions ? 'none': 'initial' }}>
           {labels.map((label, i) =>
             ListItem({
               shortcut: shortcuts[i],
@@ -130,7 +130,7 @@ export default class Sidebar extends PureComponent {
         {showGradeOptions ? (
           <div style={{ paddingBottom: '20px' }}>
             <div
-              onClick={() => this.setState({ openModal: true })}
+              onClick={() => this.setState({ openGradeInfoModal: true })}
               style={{
                 cursor: 'pointer',
                 display: 'flex',
@@ -145,17 +145,19 @@ export default class Sidebar extends PureComponent {
                 flex: '0 0 auto',
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '10px',
-                marginBottom: '10px',
+                gap: '15px',
+                flexDirection: 'column',
+                margin: '0 15px 10px 0',
               }}
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1].map(data => (
                 <div>
                   <Button
-                    size="tiny"
+                    size="medium"
+                    fluid
                     onClick={() => {
                       if (data == -1) {
-                        labelData[labels[0].id] = [''];
+                        labelData[labels[0].id] = [`${data}`];
                         labelData[labels[1].id] = ['REJECT'];
                       } else {
                         labelData[labels[0].id] = [`${data}`];
@@ -209,8 +211,8 @@ export default class Sidebar extends PureComponent {
           ) : null} */}
         </div>
         <Modal
-          open={this.state.openModal}
-          onClose={() => this.setState({ openModal: false })}
+          open={this.state.openGradeInfoModal}
+          onClose={() => this.setState({ openGradeInfoModal: false })}
         >
           <Modal.Content>
             <Container>
@@ -224,7 +226,7 @@ export default class Sidebar extends PureComponent {
           <Modal.Actions>
             <Button
               color="black"
-              onClick={() => this.setState({ openModal: false })}
+              onClick={() => this.setState({ openGradeInfoModal: false })}
             >
               Close
             </Button>
