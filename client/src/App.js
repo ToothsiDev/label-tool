@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useEffect } from 'react';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import LabelHome from './label/LabelHome';
@@ -7,34 +7,50 @@ import OverScreen from './label/OverScreen';
 import AdminApp from './admin/AdminApp';
 import Help from './help/Help';
 import Test from './label/Test';
+import RequireAuth from './RequireAuth';
+import Login from './login';
+import { AuthProvider, useAuth } from './auth';
+import { Redirect } from 'react-router-dom';
 
-class App extends Component {
-  render() {
-    if (process.env.REACT_APP_DEMO) {
-      const props = {
-        match: {
-          params: {
-            projectId: 'demo',
-            imageId: 1,
-          },
-        },
-        history: {
-          replace: () => {},
-          push: () => {},
-          goBack: () => {},
-        },
-      };
-      return <LabelingLoader {...props} />;
+const App = () => {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    let token = localStorage.getItem('accessToken');
+    if (!token) {
+      return <Redirect to="/login" />;
+    } else {
+      return <Redirect to="/" />;
     }
+  }, [user]);
+  // render() {
+  //   if (process.env.REACT_APP_DEMO) {
+  //     const props = {
+  //       match: {
+  //         params: {
+  //           projectId: 'demo',
+  //           imageId: 1,
+  //         },
+  //       },
+  //       history: {
+  //         replace: () => {},
+  //         push: () => {},
+  //         goBack: () => {},
+  //       },
+  //     };
+  //     return <LabelingLoader {...props} />;
+  //   }
 
-    return (
+  return (
+    <AuthProvider>
       <Router>
         <Fragment>
           <Route exact path="/" component={LabelHome} />
           <Route path="/admin" component={AdminApp} />
           <Route path="/help" component={Help} />
-          <Route exact path="/label/:projectId" component={LabelingLoader} />
+          <Route path="/login" component={Login} />
           <Route exact path="/hook" component={Test} />
+          <RequireAuth path="/label/:projectId" component={LabelingLoader} />
           <Route
             exact
             path="/label/:projectId/:imageId"
@@ -48,8 +64,8 @@ class App extends Component {
           />
         </Fragment>
       </Router>
-    );
-  }
-}
+    </AuthProvider>
+  );
+};
 
 export default App;
