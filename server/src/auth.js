@@ -38,7 +38,8 @@ exports.setup = app => {
 exports.checkAdminMiddleware = (req, res, next) => {
   if (
     req.session.user &&
-    req.session.user.roles.includes('ADMIN') &&
+    req.session.user.roles &&
+    req.session.user.roles.includes('admin') &&
     req.cookies.user_sid
   ) {
     next();
