@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import LabelHome from './label/LabelHome';
@@ -9,7 +9,7 @@ import Help from './help/Help';
 import Test from './label/Test';
 import RequireAuth from './RequireAuth';
 import Login from './login';
-import { AuthProvider, useAuth } from './auth';
+import { AuthProvider } from './auth';
 
 const App = () => {
   // const { isUserReady } = useAuth();
