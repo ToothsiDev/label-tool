@@ -6,6 +6,7 @@ import LabelingLoader from './label/LabelingLoader';
 import OverScreen from './label/OverScreen';
 import AdminApp from './admin/AdminApp';
 import Help from './help/Help';
+import Test from './label/Test';
 
 class App extends Component {
   render() {
@@ -33,6 +34,7 @@ class App extends Component {
           <Route path="/admin" component={AdminApp} />
           <Route path="/help" component={Help} />
           <Route exact path="/label/:projectId" component={LabelingLoader} />
+          <Route exact path="/hook" component={Test} />
           <Route
             exact
             path="/label/:projectId/:imageId"
