@@ -549,7 +549,7 @@ app.post('/api/auth/google-login', async (req, res) => {
     return;
   }
   const tokenInfo = await oAuth2Client.getTokenInfo(accessToken);
-  if (tokenInfo?.email && tokenInfo?.email_verified) {
+  if (tokenInfo && tokenInfo.email && tokenInfo.email_verified) {
     if (process.env.LOCAL_AUTH_TEST) {
       req.session.user = {
         emailId: tokenInfo.email,
@@ -594,7 +594,7 @@ app.get('/api/auth/session-user', (req, res) => {
   res.json({
     success: true,
     user: sessionUser,
-    isLoggedIn: !!sessionUser.emailId,
+    isLoggedIn: sessionUser && !!sessionUser.emailId,
   });
 });
 
