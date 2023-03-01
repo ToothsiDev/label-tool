@@ -23,7 +23,7 @@ class AdminApp extends Component {
               />
             )}
           />
-          <Route exact path="/admin/login" component={LoginPage} />
+          {/* <Route exact path="/admin/login" component={LoginPage} /> */}
           <Route path="/admin/:projectId" component={ProjectPage} />
         </Switch>
       </Menubar>

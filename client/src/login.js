@@ -15,10 +15,8 @@ export default function Login({ history }) {
       });
 
       const data = await res.json();
-      if (data && data.success && data.user) {
-        login({
-          ...data,
-        });
+      if (data && data.success && data.user && data.user.emailId) {
+        login(data.user);
         history.push('/');
       }
     } catch (error) {

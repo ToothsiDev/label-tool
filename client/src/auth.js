@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         method: 'GET',
       });
       const data = await res.json();
-      if (data && data.success && data.user) {
+      if (data && data.success && data.user && data.user.emailId) {
         login({
           ...data.user,
         });

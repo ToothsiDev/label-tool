@@ -10,7 +10,6 @@ import Test from './label/Test';
 import RequireAuth from './RequireAuth';
 import Login from './login';
 import { AuthProvider, useAuth } from './auth';
-import { Redirect } from 'react-router-dom';
 
 const App = () => {
   // const { isUserReady } = useAuth();
@@ -45,7 +44,8 @@ const App = () => {
       <Router>
         <Fragment>
           <Route exact path="/" component={LabelHome} />
-          <Route path="/admin" component={AdminApp} />
+          {/* <Route path="/admin" component={AdminApp} /> */}
+          <RequireAuth path="/admin" component={AdminApp} />
           <Route path="/help" component={Help} />
           <Route path="/login" component={Login} />
           <Route exact path="/hook" component={Test} />

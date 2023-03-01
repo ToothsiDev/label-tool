@@ -18,7 +18,7 @@ export default class ProjectsGrid extends Component {
     try {
       const r = await fetch('/api/projects/');
       if (!r.ok && r.status === 401) {
-        window.location = '/admin/login/';
+        window.location = '/login/';
         return;
       }
       const projects = await r.json();

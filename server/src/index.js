@@ -589,8 +589,8 @@ app.post('/api/auth/google-login', async (req, res) => {
 });
 
 app.get('/api/auth/session-user', (req, res) => {
-  const sessionUser = req.session.user || {};
-  delete sessionUser.accessToken;
+  const sessionUser = req.session.user;
+  if (sessionUser) delete sessionUser.accessToken;
   res.json({
     success: true,
     user: sessionUser,
