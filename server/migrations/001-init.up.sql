@@ -31,7 +31,7 @@ create table Users (
   id integer primary key autoincrement,
   name text not null,
   emailId text not null unique,
-  roles text not null default 'label',
+  roles text not null default 'label'
 )
 
 -- insert into projects (name, form) values ('Test Project', '{ "formParts": [ { "type": "polygon", "name": "Car", "id": "nfjxui" }, { "type": "bbox", "name": "Windows", "id": "n3ndi88" } ] }');
