@@ -49,7 +49,6 @@ const App = () => {
           <Route path="/help" component={Help} />
           <Route path="/login" component={Login} />
           <Route exact path="/hook" component={Test} />
-          <RequireAuth path="/label/:projectId" component={LabelingLoader} />
           <RequireAuth
             exact
             path="/label/:projectId/:imageId"
@@ -61,6 +60,7 @@ const App = () => {
               )
             }
           />
+          <RequireAuth path="/label/:projectId" component={LabelingLoader} />
           {/* <Route
             exact
             path="/label/:projectId/:imageId"
