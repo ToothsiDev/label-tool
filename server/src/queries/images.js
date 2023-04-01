@@ -6,7 +6,7 @@ const Images = {
     const images = db
       .prepare(
         `
-select images.id, originalName, link, labeled, labelData, projectsId, callbackUrl
+select images.id, originalName, externalLink, link, labeled, labelData, projectsId, callbackUrl
 from images
 where images.projectsId = ?;
 `
