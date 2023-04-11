@@ -27,20 +27,41 @@ exports.setup = app => {
   });
 };
 
-exports.checkLoginMiddleware = (req, res, next) => {
-  if (req.session.user && req.cookies.user_sid) {
+// exports.checkLoginMiddleware = (req, res, next) => {
+//   if (req.session.user && req.cookies.user_sid) {
+//     next();
+//   } else {
+//     res.status(401).send({ message: 'unauthenticated' });
+//   }
+// };
+
+exports.checkAdminMiddleware = (req, res, next) => {
+  if (
+    req.session.user &&
+    req.session.user.roles &&
+    req.session.user.roles.includes('admin') &&
+    req.cookies.user_sid
+  ) {
     next();
   } else {
     res.status(401).send({ message: 'unauthenticated' });
   }
 };
 
-exports.authHandler = (req, res, next) => {
-  const { password } = req.query;
-  if (!hash || bcrypt.compareSync(password, hash)) {
-    req.session.user = true;
-    res.json({ success: true });
+exports.checkLoginMiddleware = (req, res, next) => {
+  if (req.session.user && req.session.user.emailId) {
+    next();
   } else {
-    res.status(401).send({ message: 'unauthenticated' });
+    res.status(401).send({ message: 'Please login to make changes' });
   }
 };
+
+// exports.authHandler = (req, res, next) => {
+//   const { password } = req.query;
+//   if (!hash || bcrypt.compareSync(password, hash)) {
+//     req.session.user = true;
+//     res.json({ success: true });
+//   } else {
+//     res.status(401).send({ message: 'unauthenticated' });
+//   }
+// };
