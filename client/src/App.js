@@ -60,7 +60,7 @@ const App = () => {
               )
             }
           />
-          <RequireAuth path="/label/:projectId" component={LabelingLoader} />
+          {/* <RequireAuth path="/label/:projectId" component={LabelingLoader} /> */}
           {/* <Route
             exact
             path="/label/:projectId/:imageId"
