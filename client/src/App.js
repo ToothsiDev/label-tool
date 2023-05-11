@@ -51,7 +51,7 @@ const App = () => {
           <Route exact path="/hook" component={Test} />
           <RequireAuth
             exact
-            path="/label/:projectId/:imageId"
+            path="/label/:projectId/:imageId?"
             component={props =>
               props.match.params.imageId === 'over' ? (
                 <OverScreen {...props} />
