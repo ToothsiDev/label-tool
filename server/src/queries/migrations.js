@@ -36,12 +36,11 @@ const migrateProperImages = () => {
           '22': {
             id: refImageObj.id,
             oName: refImageObj.originalName,
-            labelData: refImageObj.labelData,
+            labelData: JSON.parse(refImageObj.labelData),
           },
           '24': {
             id: cur.id,
             oName: cur.originalName,
-            labelData: refImageObj.labelData,
           },
         };
       }
