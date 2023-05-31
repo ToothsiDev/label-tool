@@ -9,7 +9,7 @@ const migrateProperImages = () => {
   `
     )
     .all();
-  console.log(project24Images);
+  console.log(project24Images[0]);
   const project22Images = db
     .prepare(
       `
@@ -17,7 +17,7 @@ const migrateProperImages = () => {
   `
     )
     .all();
-  console.log(project22Images);
+  console.log(project22Images[0]);
   for (let i = 0; i < 10; i++) {
     console.log(project22Images[i]);
   }
