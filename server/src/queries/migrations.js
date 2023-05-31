@@ -1,5 +1,6 @@
 const db = require('./db').getDb();
 const path = require('path');
+const fs = require('fs/promises');
 
 const migrateProperImages = () => {
   const project24Images = db
@@ -19,7 +20,8 @@ const migrateProperImages = () => {
     .all();
   console.log(project24Images[0]);
   const properImageIds = [];
-  for (let i = 0; i < 10; i++) {
+  const properImageObjs = {};
+  for (let i = 0; i < project24Images.length; i++) {
     const cur = project24Images[i];
     const curOImageName = cur.originalName.replace('@&@mouth_256x256', '');
     const refImageObj = project22Images.find(
@@ -30,10 +32,26 @@ const migrateProperImages = () => {
       console.log(refImageLabel, refImageObj);
       if (refImageLabel['labels']['afdmj2rxn'][0] == 'PROPER') {
         properImageIds.push(refImageObj.id);
+        properImageObjs[refImageObj.id] = {
+          '22': {
+            id: refImageObj.id,
+            oName: refImageObj.originalName,
+            labelData: refImageObj.labelData,
+          },
+          '24': {
+            id: cur.id,
+            oName: cur.originalName,
+            labelData: refImageObj.labelData,
+          },
+        };
       }
     }
   }
-  console.log('properImageIds', properImageIds);
+  console.log('properImageIds', properImageIds, properImageIds.length);
+  fs.writeFile(
+    './output_migrations_final.json',
+    JSON.stringify(properImageObjs)
+  );
 };
 
 migrateProperImages();
