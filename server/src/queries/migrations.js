@@ -21,6 +21,7 @@ const migrateProperImages = () => {
   console.log(project24Images[0]);
   const properImageIds = [];
   const properImageObjs = {};
+  const gradeWiseBreakup = {};
   for (let i = 0; i < project24Images.length; i++) {
     const cur = project24Images[i];
     const curOImageName = cur.originalName.replace('@&@mouth_256x256', '');
@@ -32,6 +33,11 @@ const migrateProperImages = () => {
       console.log(refImageLabel, refImageObj);
       if (refImageLabel['labels']['afdmj2rxn'][0] == 'PROPER') {
         properImageIds.push(refImageObj.id);
+        if (gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]]) {
+          gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]] += 1;
+        } else {
+          gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]] = 1;
+        }
         properImageObjs[refImageObj.id] = {
           '22': {
             id: refImageObj.id,
@@ -51,6 +57,7 @@ const migrateProperImages = () => {
     './output_migrations_final.json',
     JSON.stringify(properImageObjs)
   );
+  console.log(gradeWiseBreakup);
 };
 
 migrateProperImages();
