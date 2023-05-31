@@ -17,9 +17,21 @@ const migrateProperImages = () => {
   `
     )
     .all();
-  console.log(project22Images[0]);
+  console.log(project24Images[0]);
+  const properImageIds = [];
   for (let i = 0; i < 10; i++) {
-    console.log(project22Images[i]);
+    const cur = project24Images[i];
+    const curOImageName = cur.originalName.replace('@&@mouth_256x256', '');
+    const refImageObj = project22Images.find(
+      cur => cur.originalName.indexOf(curOImageName) != -1
+    );
+    if (refImageObj) {
+      const refImageLabel = JSON.parse(refImageObj.labelData);
+      console.log(refImageLabel, refImageObj);
+      if (refImageLabel['labels']['afdmj2rxn'][0] == 'PROPER') {
+        properImageIds.push(refImageObj.id);
+      }
+    }
   }
 };
 
