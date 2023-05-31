@@ -33,6 +33,7 @@ const migrateProperImages = () => {
       }
     }
   }
+  console.log('properImageIds', properImageIds);
 };
 
 migrateProperImages();
