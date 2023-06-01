@@ -33,6 +33,9 @@ const migrateProperImages = () => {
       console.log(refImageLabel, refImageObj);
       if (refImageLabel['labels']['afdmj2rxn'][0] == 'PROPER') {
         properImageIds.push(refImageObj.id);
+        db.prepare(
+          `update Images set projectsId=28 where projectsId=22 and id=?`
+        ).run(refImageObj.id);
         if (gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]]) {
           gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]] += 1;
         } else {
@@ -52,13 +55,13 @@ const migrateProperImages = () => {
       }
     }
   }
-  db.prepare(
-    `
-    update Images set projectsId=28 where projectsId=22 and id in (${properImageIds
-      .map(cur => '?')
-      .join(',')})
-  `
-  ).run(properImageIds);
+  // db.prepare(
+  //   `
+  //   update Images set projectsId=28 where projectsId=22 and id in (${properImageIds
+  //     .map(cur => '?')
+  //     .join(',')})
+  // `
+  // ).run(properImageIds);
   console.log('properImageIds', properImageIds, properImageIds.length);
   fs.writeFile(
     './output_migrations_final.json',
