@@ -89,9 +89,9 @@ const migrateProperImagesNew = () => {
       console.log(refImageLabel, refImageObj);
       if (refImageLabel['labels']['afdmj2rxn'][0] == 'PROPER') {
         properImageIds.push(refImageObj.id);
-        // db.prepare(
-        //   `update Images set projectsId=28 where projectsId=22 and id=?`
-        // ).run(refImageObj.id);
+        db.prepare(
+          `update Images set projectsId=28 where projectsId=10 and id=?`
+        ).run(refImageObj.id);
         if (gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]]) {
           gradeWiseBreakup[refImageLabel['labels']['607jvc0vd'][0]] += 1;
         } else {
