@@ -9,6 +9,7 @@ import Help from './help/Help';
 import Test from './label/Test';
 import RequireAuth from './RequireAuth';
 import Login from './login';
+import TeethWhitening from './exp/teeth-whitening';
 import { AuthProvider } from './auth';
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
           <Route path="/help" component={Help} />
           <Route path="/login" component={Login} />
           <Route exact path="/hook" component={Test} />
+          <Route exact path="/exp/teeth-whitening" component={TeethWhitening} />
           <RequireAuth
             exact
             path="/label/:projectId/:imageId?"
