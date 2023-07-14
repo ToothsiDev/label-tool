@@ -18,7 +18,7 @@ export function UploadScreen({ setImages }) {
     formData.append('image', selectedImage);
 
     axios
-      .post('http://43.205.236.181/whiten-teeth', formData)
+      .post('/whiten-teeth', formData)
       .then(response => {
         setLoading(0);
         var reader = new FileReader();
@@ -114,6 +114,7 @@ export function UploadScreen({ setImages }) {
             }}
             onClick={() => {
               setSelectedImage(null);
+              setLoading(0);
             }}
           >
             Reset
