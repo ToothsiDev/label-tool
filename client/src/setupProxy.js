@@ -5,5 +5,10 @@ const port = process.env.API_PORT || parseInt(mainPort, 10) + 1;
 module.exports = function(app) {
   app.use(proxy('/api', { target: `http://localhost:${port}/` }));
   app.use(proxy('/uploads', { target: `http://localhost:${port}/` }));
-  app.use(proxy('/whiten-teeth', { target: `http://43.205.236.181/` }));
+  app.use(
+    proxy('/whiten-teeth', {
+      target: `http://43.205.236.181/`,
+      changeOrigin: true,
+    })
+  );
 };
