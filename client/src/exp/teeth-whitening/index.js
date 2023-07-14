@@ -5,6 +5,9 @@ import { UploadScreen } from './UploadScreen';
 
 export default function(props) {
   const [beforeAfterImage, setImages] = useState(null);
+  const showApplyMakeoAIScreen = beforeAfterImage && beforeAfterImage.before;
+  const showBeforeAfterScreen =
+    beforeAfterImage && beforeAfterImage.before && beforeAfterImage.after;
   return (
     <div
       style={{
@@ -16,7 +19,7 @@ export default function(props) {
         background: '#f3f3f3',
       }}
     >
-      {beforeAfterImage != null ? (
+      {showApplyMakeoAIScreen || showBeforeAfterScreen ? (
         <div
           className="header"
           style={{
@@ -59,30 +62,14 @@ export default function(props) {
           </div>
         </div>
       ) : null}
-      {beforeAfterImage != null ? (
+      {showBeforeAfterScreen ? (
         <BeforeAfterImage
           before={beforeAfterImage.before}
           after={beforeAfterImage.after}
         />
       ) : (
-        <UploadScreen setImages={setImages} />
+        <UploadScreen setImages={setImages} images={beforeAfterImage} />
       )}
-      {beforeAfterImage != null ? (
-        <div
-          className="footer"
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: '80px',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#fff',
-            borderRadius: '20px 20px 0px 0px',
-          }}
-        />
-      ) : null}
     </div>
   );
 }
