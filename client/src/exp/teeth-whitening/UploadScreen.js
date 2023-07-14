@@ -28,7 +28,7 @@ export function UploadScreen({ setImages, images }) {
     formData.append('image', selectedImage);
 
     axios
-      .post('http://43.205.236.181/whiten-teeth', formData)
+      .post('https://aitools.jaim.tech/whiten-teeth', formData)
       .then(response => {
         setLoading(0);
         setImages(v => ({
